@@ -1,0 +1,78 @@
+package com.example.demo.controller;
+
+import java.util.List;
+
+import java.util.NoSuchElementException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.model.Employ;
+import com.example.demo.services.EmployService;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+
+
+@RestController
+@RequestMapping(value="/employ")
+public class EmplyController {
+
+		@Autowired
+		private EmployService employService;
+		
+		@GetMapping(value="/showEmploy")
+		public List<Employ> showEmploy(){
+			return employService.showEmploy();
+		}
+		
+		@GetMapping(value="/searchEmploy/{id}")
+		public ResponseEntity<Employ> searchEmploy(@PathVariable int id){
+			try {
+					Employ employ = employService.searchEmploy(id);
+					return new ResponseEntity<Employ>(employ,HttpStatus.OK);
+			}catch(NoSuchElementException e) {
+				return new ResponseEntity<Employ>(HttpStatus.NOT_FOUND);
+			}
+		}
+		
+		@PutMapping(value="/updateEmploy")
+		public ResponseEntity<Employ> updateEmploy(@RequestBody Employ employ){
+			try {
+				employService.searchEmploy(employ.getEmployId());
+				employService.updateEmploy(employ);
+				return new ResponseEntity<Employ>(HttpStatus.OK);
+			}catch(NoSuchElementException e) {
+				return new ResponseEntity<Employ>(HttpStatus.NOT_FOUND);
+			}
+			
+		}
+		
+		@DeleteMapping(value="/deleteEmploy/{id}")
+		public ResponseEntity<Employ> deleteEmploy(@PathVariable int id, @RequestBody Employ employ){
+			try {
+				employService.searchEmploy(employ.getEmployId());
+				employService.deleteEmploy(id);
+				return new ResponseEntity<Employ>(HttpStatus.OK);
+			}catch(NoSuchElementException e) {
+				return new ResponseEntity<Employ>(HttpStatus.NOT_FOUND);
+			}
+		
+		
+		}
+		
+		@PostMapping(value="/addEmploy")
+		public void addEmploy(@RequestBody Employ employ) {
+			employService.addEmploy(employ);
+			
+		}
+		
+}
