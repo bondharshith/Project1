@@ -1,5 +1,0 @@
-set path=%path%;C:\Users\Harshith.P\AppData\Roaming\npm
-
-
-
-chrome.exe --user-data-dir="C://Chrome dev session" --disable-web-security
